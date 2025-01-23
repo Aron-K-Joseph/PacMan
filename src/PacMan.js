@@ -14,6 +14,7 @@ export default class Pacman {
         document.addEventListener("keydown", this.#keydown);
 
         this.#loadPacmanImages();
+        
     }
 
     draw(ctx) {
@@ -57,9 +58,14 @@ export default class Pacman {
 
     #move() {
         if (Number.isInteger(this.x / this.tileSize) && Number.isInteger(this.y / this.tileSize)) {
-            this.currentMovingDirection = this.requestedMovingDirection;
+            if(!this.tileMap.didCollideWithEnvironment(this.x,this.y,this.requestedMovingDirection)){
+                
+                this.currentMovingDirection = this.requestedMovingDirection;
+            } 
         }
-
+        if(this.tileMap.didCollideWithEnvironment(this.x,this.y,this.currentMovingDirection)){
+            return;
+        } 
         switch (this.currentMovingDirection) {
             case MovingDirection.up:
                 this.y -= this.velocity;

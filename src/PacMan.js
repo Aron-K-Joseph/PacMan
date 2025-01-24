@@ -16,17 +16,33 @@ export default class Pacman {
 
         document.addEventListener("keydown", this.#keydown);
 
+        this.pacmanRotation = this.Rotation.right;
+
         this.#loadPacmanImages();
         
+    }
+
+    Rotation = {
+        right:0,
+        down:1,
+        left:2,
+        up:3
     }
 
     draw(ctx) {
         
         this.#move();
         this.#animate();
-        ctx.drawImage(this.pacmanImages[this.pacmanImageIndex], this.x, this.y, this.tileSize, this.tileSize);
+        //ctx.drawImage(this.pacmanImages[this.pacmanImageIndex], this.x, this.y, this.tileSize, this.tileSize);
+        const size = this.tileSize/2;
+        ctx.save();
+        ctx.translate(this.x + size, this.y + size);
+        ctx.rotate((this.pacmanRotation * 90 * Math.PI)/180);
+        ctx.drawImage(this.pacmanImages[this.pacmanImageIndex], -size, -size, this.tileSize, this.tileSize);
         
+        ctx.restore();
     }
+    
 
     #loadPacmanImages() {
         const pacmanImage1 = new Image();
@@ -49,15 +65,19 @@ export default class Pacman {
         switch (event.keyCode) {
             case 38: // Up arrow
                 this.requestedMovingDirection = MovingDirection.up;
+                this.pacmanRotation = this.Rotation.up;
                 break;
             case 40: // Down arrow
                 this.requestedMovingDirection = MovingDirection.down;
+                this.pacmanRotation = this.Rotation.down;
                 break;
             case 37: // Left arrow
                 this.requestedMovingDirection = MovingDirection.left;
+                this.pacmanRotation = this.Rotation.left;
                 break;
             case 39: // Right arrow
                 this.requestedMovingDirection = MovingDirection.right;
+                this.pacmanRotation = this.Rotation.right;
                 break;
         }
     };

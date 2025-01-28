@@ -40,6 +40,9 @@ export default class TileMap{
                 else if(tile === 0){
                     this.#drawYellowDot(ctx, column, row, this.tileSize);
                 }
+                else{
+                    this.#drawBlank(ctx, column, row, this.tileSize);
+                }
 
                 ctx.strokeStyle = "blue";
                 ctx.strokeRect(column*this.tileSize, row*this.tileSize, this.tileSize, this.tileSize)
@@ -51,6 +54,10 @@ export default class TileMap{
     }
     #drawYellowDot(ctx, column, row, size){
         ctx.drawImage(this.yellowDot, column*this.tileSize, row*this.tileSize,size,size)
+    }
+    #drawBlank(ctx,column,row,size){
+        ctx.fillStyle = "black";
+        ctx.fillRect(column *this.tileSize, row * this.tileSize, size, size)
     }
     getPacman(velocity){
         for(let row = 0; row <this.map.length; row++){
@@ -105,5 +112,17 @@ export default class TileMap{
             return false;
         }
         
+    }
+    eatDot(x, y){
+        const row = y/this.tileSize;
+        const column = x/this.tileSize;
+        if(Number.isInteger(row) && Number.isInteger(column)){
+            if(this.map[row][column] === 0){
+                this.map[row][column] = 5;
+                return true;
+            }
+        }
+        return false;
+
     }
 }

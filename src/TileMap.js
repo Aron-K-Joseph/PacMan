@@ -13,15 +13,27 @@ export default class TileMap{
 
         this.wall = new Image();
         this.wall.src = "./images/wall.png";
+
+        
+        this.powerDot = this.pinkDot;
+        this.powerDotAnimationTimerDefault = 30;
+        this.powerDotAnimationTimer = this.powerDotAnimationTimerDefault
     }
+    //1 = wall
+    //0 = dot
+    //6 = ghost
+    //4 = pacman
+    //5 = empty space
+    //7 = power dot
     map = [
+
             [1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,6,0,0,0,0,0,4,0,0,0,1],
+            [1,0,6,0,7,0,0,0,4,0,0,0,1],
             [1,0,1,1,1,1,1,1,0,0,0,0,1],
             [1,0,1,0,0,0,0,0,0,0,1,0,1],
             [1,0,1,0,1,1,1,0,1,0,1,0,1],
-            [1,0,1,0,1,1,1,0,0,0,1,0,1],
-            [1,0,1,0,1,0,0,6,1,0,1,0,1],
+            [1,0,1,6,1,1,1,7,0,0,1,0,1],
+            [1,7,1,0,1,0,0,6,1,0,1,0,1],
             [1,6,1,0,1,0,1,1,1,0,1,0,1],
             [1,0,1,0,1,0,1,1,1,0,1,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -41,6 +53,9 @@ export default class TileMap{
                 else if(tile === 0){
                     this.#drawYellowDot(ctx, column, row, this.tileSize);
                 }
+                else if(tile === 7){
+                    this.#drawPowerDot(ctx, column, row, this.tileSize);
+                }
                 else{
                     this.#drawBlank(ctx, column, row, this.tileSize);
                 }
@@ -55,6 +70,19 @@ export default class TileMap{
     }
     #drawYellowDot(ctx, column, row, size){
         ctx.drawImage(this.yellowDot, column*this.tileSize, row*this.tileSize,size,size)
+    }
+    #drawPowerDot(ctx, column, row, size){
+        this.powerDotAnimationTimer--;
+        if(this.powerDotAnimationTimer === 0){
+            this.powerDotAnimationTimer = this.powerDotAnimationTimerDefault;
+            if(this.powerDot == this.pinkDot){
+                this.powerDot = this.yellowDot;
+            }
+            else{
+                this.powerDot = this.pinkDot;
+            }
+        }
+        ctx.drawImage(this.powerDot,column*this.tileSize, row*this.tileSize, this.tileSize,this.tileSize);
     }
     #drawBlank(ctx,column,row,size){
         ctx.fillStyle = "black";

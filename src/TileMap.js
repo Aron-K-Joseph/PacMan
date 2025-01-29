@@ -1,5 +1,6 @@
 import Pacman from "./PacMan.js";
 import MovingDirection from "./MovingDirection.js";
+import Enemy from "./Enemy.js"
 export default class TileMap{
     constructor(tileSize){
         this.tileSize = tileSize;
@@ -15,13 +16,13 @@ export default class TileMap{
     }
     map = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,0,4,0,0,0,1],
+            [1,0,6,0,0,0,0,0,4,0,0,0,1],
             [1,0,1,1,1,1,1,1,0,0,0,0,1],
             [1,0,1,0,0,0,0,0,0,0,1,0,1],
             [1,0,1,0,1,1,1,0,1,0,1,0,1],
             [1,0,1,0,1,1,1,0,0,0,1,0,1],
-            [1,0,1,0,1,0,0,0,1,0,1,0,1],
-            [1,0,1,0,1,0,1,1,1,0,1,0,1],
+            [1,0,1,0,1,0,0,6,1,0,1,0,1],
+            [1,6,1,0,1,0,1,1,1,0,1,0,1],
             [1,0,1,0,1,0,1,1,1,0,1,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1]
@@ -70,6 +71,20 @@ export default class TileMap{
                 }
             }
         }
+    }
+    getEnemies(velocity){
+        const enemies = [];
+        for(let row = 0; row <this.map.length; row++){
+            for(let column=0; column< this.map[row].length; column++){
+                const tile = this.map[row][column];
+                if(tile === 6){
+                    this.map[row][column] = 0;
+                    enemies.push(new Enemy(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this));
+                    
+                }
+            }
+        }
+        return enemies;
     }
     setCanvasSize(canvas){
         canvas.width = this.map[0].length * this.tileSize;

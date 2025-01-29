@@ -21,6 +21,7 @@ export default class Pacman {
         this.wakaSound = new Audio("../sounds/waka.wav");
 
         this.#loadPacmanImages();
+        this.madeFirstMove = false;
         
     }
 
@@ -70,18 +71,22 @@ export default class Pacman {
             case 38: // Up arrow
                 this.requestedMovingDirection = MovingDirection.up;
                 this.pacmanRotation = this.Rotation.up;
+                this.madeFirstMove = true;
                 break;
             case 40: // Down arrow
                 this.requestedMovingDirection = MovingDirection.down;
                 this.pacmanRotation = this.Rotation.down;
+                this.madeFirstMove = true;
                 break;
             case 37: // Left arrow
                 this.requestedMovingDirection = MovingDirection.left;
                 this.pacmanRotation = this.Rotation.left;
+                this.madeFirstMove = true;
                 break;
             case 39: // Right arrow
                 this.requestedMovingDirection = MovingDirection.right;
                 this.pacmanRotation = this.Rotation.right;
+                this.madeFirstMove = true;
                 break;
         }
     };

@@ -37,10 +37,11 @@ export default class Pacman {
         up:3
     }
 
-    draw(ctx) {
-        
-        this.#move();
-        this.#animate(this.tileMap);
+    draw(ctx,pause) {
+        if(!pause){
+            this.#move();
+            this.#animate(this.tileMap);
+        }
         this.#eatDot();
         this.#eatPowerDot();
         //ctx.drawImage(this.pacmanImages[this.pacmanImageIndex], this.x, this.y, this.tileSize, this.tileSize);

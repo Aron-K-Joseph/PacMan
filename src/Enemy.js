@@ -13,14 +13,46 @@ export default class Enemy {
         this.movingDirection = Math.floor(Math.random() * Object.keys(MovingDirection).length);
         this.directionTimerDefault = this.#random(1,3);
         this.directionTimer = this.directionTimerDefault;
+
+        this.scaredAboutToExpireTimerDefault = 10;
+        this.scaredAboutToExpireTimer = this.scaredAboutToExpireTimerDefault
     }
-    draw(ctx, pause){
+    draw(ctx, pause,pacman){
         if(!pause){
             this.#move();
             this.#changeDirection();
         }
-        ctx.drawImage(this.image,this.x,this.y,this.tileSize,this.tileSize);
+        this.#setImage(ctx, pacman);
     }
+
+    #setImage(ctx,pacman){
+        if(pacman.powerDotActive){
+            this.#setImageWhenPowerDotIsActive(pacman)
+        }else{
+            this.image = this.normalGhost;
+        }
+        ctx.drawImage(this.image,this.x,this.y,this.tileSize,this.tileSize )
+    }
+
+    #setImageWhenPowerDotIsActive(pacman){
+        if(pacman.powerDotAboutToExpire){
+            this.scaredAboutToExpireTimer--;
+            if(this.scaredAboutToExpireTimer === 0){
+                this.scaredAboutToExpireTimer = this.scaredAboutToExpireTimerDefault;
+                if(this.image === this.scaredGhost){
+                    this.image = this.scaredGhost2;
+                }
+                else{
+                    this.image = this.scaredGhost;
+                }
+            }
+        }
+        else{
+            this.image = this.scaredGhost;
+        }
+
+    }
+
     #changeDirection(){
         this.directionTimer--;
         let newMoveDirection = null;

@@ -19,9 +19,10 @@ const gameWinSound = new Audio("../sounds/gameWin.wav");
 
 function gameLoop() {
     tileMap.draw(ctx);
-    pacman.draw(ctx,pause());
+    pacman.draw(ctx,pause(),enemies);
     enemies.forEach((enemy) => enemy.draw(ctx,pause(), pacman));
     checkGameOver();
+    checkGameWin();
 }
 function checkGameOver(){
     if(!gameOver){
@@ -31,11 +32,19 @@ function checkGameOver(){
         }
     }
 }
+function checkGameWin(){
+    if(!gameWin){
+        gameWin = tileMap.didWin();
+        if(gameWin){
+            gameWinSound.play();
+        }
+    }  
+}
 function isGameOver(){
     return enemies.some(enemy => !pacman.powerDotActive && enemy.collideWith(pacman))
 }
 function pause(){
-    return !pacman.madeFirstMove || gameOver;
+    return !pacman.madeFirstMove || gameOver || gameWin;
 }
 tileMap.setCanvasSize(canvas);
 setInterval(gameLoop, 10);

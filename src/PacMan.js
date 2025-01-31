@@ -25,6 +25,8 @@ export default class Pacman {
         this.powerDotAboutToExpire = false;
         this.timers = [];
 
+        this.eatGhostSound = new Audio("../sounds/eat_ghost.wav");
+
         this.#loadPacmanImages();
         this.madeFirstMove = false;
         
@@ -37,7 +39,7 @@ export default class Pacman {
         up:3
     }
 
-    draw(ctx,pause) {
+    draw(ctx,pause,enemies) {
         if(!pause){
             this.#move();
             this.#animate(this.tileMap);
@@ -45,7 +47,8 @@ export default class Pacman {
         this.#eatDot();
         this.#eatPowerDot();
         //ctx.drawImage(this.pacmanImages[this.pacmanImageIndex], this.x, this.y, this.tileSize, this.tileSize);
-        
+        this.#eatGhost(enemies);
+
         const size = this.tileSize/2;
         ctx.save();
         ctx.translate(this.x + size, this.y + size);
@@ -57,15 +60,16 @@ export default class Pacman {
     
 
     #loadPacmanImages() {
+        //fully closed
         const pacmanImage1 = new Image();
         pacmanImage1.src = "../images/pac0.png";
-
+        //partialy opened
         const pacmanImage2 = new Image();
         pacmanImage2.src = "../images/pac1.png";
-
+        //fully opened
         const pacmanImage3 = new Image();
         pacmanImage3.src = "../images/pac2.png";
-
+        //partially opened
         const pacmanImage4 = new Image();
         pacmanImage4.src = "../images/pac1.png";
 
@@ -171,6 +175,16 @@ export default class Pacman {
             this.timers.push(powerDotAboutToExpireTimer);
         }
          
+    }
+    #eatGhost(enemies){
+        if(this.powerDotActive){
+            //gives list of enemies which have collided with current pacman object
+            const collideEnemies = enemies.filter((enemy)=>enemy.collideWith(this));
+            collideEnemies.forEach((enemy)=>{
+                enemies.splice(enemies.indexOf(enemy), 1);
+                this.eatGhostSound.play();
+            });
+        }
     }
 
 }

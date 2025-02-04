@@ -161,7 +161,7 @@ export default class Pacman {
             
             let powerDotTimer = setTimeout(()=>{
                 this.powerDotActive = false;
-                this.pacmanAnimationTimerDefault = false;
+                this.powerDotAboutToExpire = false;
             },1000*6)
             
             
